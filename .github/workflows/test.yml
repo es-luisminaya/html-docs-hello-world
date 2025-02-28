@@ -38,6 +38,8 @@ jobs:
         ssh-keyscan -H 34.138.75.14 >> ~/.ssh/known_hosts
 
     - name: Deploy to VM
+      # run: |
+        # scp -r . vm-instance:/path/to/deploy/directory
+        # ssh vm-instance "chmod +x /path/to/deploy/directory/deploy.sh && /path/to/deploy/directory/deploy.sh"
       run: |
-        scp -r . vm-instance:/path/to/deploy/directory
-        ssh vm-instance "chmod +x /path/to/deploy/directory/deploy.sh && /path/to/deploy/directory/deploy.sh"
+        echo "Hello World"
