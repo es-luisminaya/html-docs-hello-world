@@ -39,5 +39,4 @@ jobs:
 
     - name: Deploy to VM
       run: |
-        scp -r . vm-instance:/usr/bin/
         ssh vm-instance "chmod +x /usr/bin/deployment && /usr/bin/deployment"
