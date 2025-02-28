@@ -20,8 +20,8 @@ jobs:
     - name: Authenticate to GCP using Workload Identity Federation
       uses: google-github-actions/auth@v1
       with:
-        workload_identity_provider: projects/${{ secrets.GCP_PROJECT_NUMBER_TEST }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider
-        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL_TEST }}
+        workload_identity_provider: projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
 
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
@@ -29,7 +29,7 @@ jobs:
     - name: Configure SSH
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY_TEST }}" | tr -d '\r' > ~/.ssh/gcp-vm-deploy-key
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/gcp-vm-deploy-key
         chmod 600 ~/.ssh/gcp-vm-deploy-key
         echo "Host vm-instance" >> ~/.ssh/config
         echo "  HostName 34.138.75.14" >> ~/.ssh/config
@@ -37,6 +37,11 @@ jobs:
         echo "  IdentityFile ~/.ssh/gcp-vm-deploy-key" >> ~/.ssh/config
         ssh-keyscan -H 34.138.75.14 >> ~/.ssh/known_hosts
 
+        # Verificar conexión SSH
+        ssh -o StrictHostKeyChecking=no vm-instance "echo 'SSH connection successful'"
+
     - name: Deploy to VM
       run: |
-        ssh vm-instance "chmod +x /usr/bin/deployment && /usr/bin/deployment"
+        set -e  # Detener el script si hay un error
+        scp -i ~/.ssh/gcp-vm-deploy-key ./deployment.sh devops@34.138.75.14:/usr/bin/deployment.sh
+        ssh -i ~/.ssh/gcp-vm-deploy-key devops@34.138.75.14 "chmod +x /usr/bin/deployment.sh && /usr/bin/deployment.sh"
