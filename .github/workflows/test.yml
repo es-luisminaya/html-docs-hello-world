@@ -37,11 +37,10 @@ jobs:
         echo "  IdentityFile ~/.ssh/gcp-vm-deploy-key" >> ~/.ssh/config
         ssh-keyscan -H 34.138.75.14 >> ~/.ssh/known_hosts
 
-        # Verificar conexión SSH
-        ssh -o StrictHostKeyChecking=no vm-instance "echo 'SSH connection successful'"
-
-    # - name: Deploy to VM
-    #   run: |
-    #     set -e  # Detener el script si hay un error
-    #     scp -i ~/.ssh/gcp-vm-deploy-key ./deployment.sh devops@34.138.75.14:/usr/bin/deployment.sh
-    #     ssh -i ~/.ssh/gcp-vm-deploy-key devops@34.138.75.14 "chmod +x /usr/bin/deployment.sh && /usr/bin/deployment.sh"
+    - name: Deploy to VM
+      # run: |
+        # scp -r . vm-instance:/path/to/deploy/directory
+        # ssh vm-instance "chmod +x /path/to/deploy/directory/deploy.sh && /path/to/deploy/directory/deploy.sh"
+      run: |
+        mkdir ~/it-works
+        echo "Done"
