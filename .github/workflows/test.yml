@@ -42,4 +42,5 @@ jobs:
         # scp -r . vm-instance:/path/to/deploy/directory
         # ssh vm-instance "chmod +x /path/to/deploy/directory/deploy.sh && /path/to/deploy/directory/deploy.sh"
       run: |
-        echo "Hello World"
+        mkdir ~/it-works
+        echo "Done"
