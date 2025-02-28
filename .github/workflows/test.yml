@@ -1,0 +1,43 @@
+name: Deploy to GCP VM
+
+on:
+  push:
+    branches:
+      - devops/ci-cd/integration
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Authenticate to GCP using Workload Identity Federation
+      uses: google-github-actions/auth@v1
+      with:
+        workload_identity_provider: projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/gcp-vm-deploy-key
+        chmod 600 ~/.ssh/gcp-vm-deploy-key
+        echo "Host vm-instance" >> ~/.ssh/config
+        echo "  HostName 34.138.75.14" >> ~/.ssh/config
+        echo "  User devops" >> ~/.ssh/config
+        echo "  IdentityFile ~/.ssh/gcp-vm-deploy-key" >> ~/.ssh/config
+        ssh-keyscan -H 34.138.75.14 >> ~/.ssh/known_hosts
+
+    - name: Deploy to VM
+      run: |
+        scp -r . vm-instance:/path/to/deploy/directory
+        ssh vm-instance "chmod +x /path/to/deploy/directory/deploy.sh && /path/to/deploy/directory/deploy.sh"
