@@ -36,6 +36,7 @@ jobs:
         echo "  User devops" >> ~/.ssh/config
         echo "  IdentityFile ~/.ssh/gcp-vm-deploy-key" >> ~/.ssh/config
         ssh-keyscan -H 34.138.75.14 >> ~/.ssh/known_hosts
+        
 
     - name: Deploy to VM
       run: |
