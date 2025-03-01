@@ -37,6 +37,8 @@ jobs:
         echo "  IdentityFile ~/.ssh/gcp-vm-deploy-key" >> ~/.ssh/config
         ssh-keyscan -H 34.138.75.14 >> ~/.ssh/known_hosts
 
+        ssh -o StrictHostKeyChecking=no vm-instance "echo 'SSH connection successful'"
+
     - name: Deploy to VM
       # run: |
         # scp -r . vm-instance:/path/to/deploy/directory
