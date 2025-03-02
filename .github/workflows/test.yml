@@ -41,4 +41,4 @@ jobs:
     - name: Deploy to VM
       run: |
         set -e  # Detener el script si hay un error
-        ssh -i ~/.ssh/gcp-vm-deploy-key devops-conep@34.138.75.14 "./deployment"
+        ssh -i ~/.ssh/gcp-vm-deploy-key devops-conep@34.138.75.14 "./script.sh"
