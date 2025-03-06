@@ -25,19 +25,11 @@ jobs:
 
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
-
-    - name: Configure SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY_TEST }}" | tr -d '\r' > ~/.ssh/gcp-vm-deploy-key
-        chmod 600 ~/.ssh/gcp-vm-deploy-key
-        echo "Host vm-instance" >> ~/.ssh/config
-        echo "  HostName 34.138.75.14" >> ~/.ssh/config
-        echo "  User devops" >> ~/.ssh/config
-        echo "  IdentityFile ~/.ssh/gcp-vm-deploy-key" >> ~/.ssh/config
-        ssh-keyscan -H 34.138.75.14 >> ~/.ssh/known_hosts
+      
 
     - name: Deploy to VM
       run: |
-        set -e  # Detener el script si hay un error
-        ssh -i ~/.ssh/gcp-vm-deploy-key devops-conep@34.138.75.14 "cer-rd/workflow.sh"
+        gcloud compute ssh conep-integridad-test-env \
+            --zone us-east1-d \
+            --project conep-integridad-test \
+            --command "bash -s" < ./cer-rd/workflow.sh
