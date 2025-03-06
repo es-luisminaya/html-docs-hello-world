@@ -32,4 +32,4 @@ jobs:
         gcloud compute ssh conep-integridad-test-env \
             --zone us-east1-d \
             --project conep-integridad-test \
-            --command "bash -s" < ./cer-rd/workflow.sh
+            --command "bash -s" < /home/devops-conep/cer-rd/workflow.sh
