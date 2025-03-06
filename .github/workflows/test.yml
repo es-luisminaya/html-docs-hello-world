@@ -20,7 +20,7 @@ jobs:
     - name: Authenticate to GCP using Workload Identity Federation
       uses: google-github-actions/auth@v1
       with:
-        workload_identity_provider: projects/${{ secrets.GCP_PROJECT_NUMBER_TEST }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+        workload_identity_provider: projects/${{ secrets.GCP_PROJECT_NUMBER_TEST }}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider
         service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL_TEST }}
 
     - name: Set up Google Cloud SDK
